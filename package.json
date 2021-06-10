@@ -1,0 +1,23 @@
+{
+  "name": "yuri-interactions",
+  "version": "0.1.0",
+  "description": "Web server to handle yuri's discord interactions with a webhook",
+  "repository": "github:Yuri-discordbot/discord-interactions",
+  "author": {
+    "name": "Catherine Gilbert",
+    "email": "catherine.gilbert15@gmail.com",
+    "url": "olaren.dev"
+  },
+  "license": "MIT",
+  "main": "src/interactions.js",
+  "scripts": {
+    "start": "node src/interactions.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "discord-interactions": "^2.1.0",
+    "data-access": "git://github.com/Yuri-discordbot/data-access"
+  },
+  "private": true
+}
