@@ -142,7 +142,7 @@ app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, r
                     data: {
                         embeds: [
                             {
-                                description: `<@${message.message.interaction.user.id}> pats <@${clickUser.id}>`,
+                                description: `<@${message.message.interaction.user.id}> is patting <@${clickUser.id}>`,
                                 image: {
                                     url: "https://media1.tenor.com/images/d7c326bd43776f1e0df6f63956230eb4/tenor.gif?itemid=17187002"
                                 },
