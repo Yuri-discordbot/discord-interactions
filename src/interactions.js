@@ -1,9 +1,8 @@
 const express = require("express");
 const morgan = require("morgan");
 const {verifyKeyMiddleware} = require("discord-interactions");
-const helloData = require("data-access");
 
-const PUBLIC_DISCORD_APPLICATION_KEY = process.env.public_discord_application_key;
+const PUBLIC_DISCORD_APPLICATION_KEY = process.env.PUBLIC_DISCORD_APPLICATION_KEY;
 
 const app = express();
 
@@ -13,8 +12,6 @@ app.use(morgan("dev"));
 app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, res) => {
     res.status(200);
     const message = req.body;
-
-    console.log(helloData());
 
     if (message.type === 1) {
         res.send({
@@ -100,8 +97,6 @@ app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, r
         });
     } else if (message.type === 3) {
         console.log(message);
-        //console.log(message.message);
-        //console.log(message.message.components[0].components);
 
         if (message.data !== undefined && (message.data.custom_id === "accept_offer" || message.data.custom_id === "decline_offer")) {
             const clickUser = message.member !== undefined ? message.member.user : message.user;
@@ -165,4 +160,6 @@ app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, r
     }
 });
 
-app.listen(3000);
+let port = process.env.PORT || 3000;
+
+app.listen(port);
