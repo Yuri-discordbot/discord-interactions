@@ -71,6 +71,10 @@ app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, r
                     }
                 } else {
                     data = {
+                        content: receiver === "@everyone" ? undefined : receiver,
+                        allowed_mentions: {
+                            parse: ["roles", "users"]
+                        },
                         embeds: [
                             {
                                 description: `${sender} is patting ${receiver}`,
@@ -145,6 +149,7 @@ app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, r
                             }
                         ],
                         components: [],
+                        content: `<@${clickUser.id}>`,
                     }
                 });
             } else {
