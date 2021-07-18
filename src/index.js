@@ -38,14 +38,18 @@ app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, r
 
                 let color = 16755938; // default yuri color
 
+
+                let offerOption = message.data.options[1];
                 // check if asking
-                if (message.data.options[1] ?? false) {
+                if (offerOption !== undefined && offerOption.value === true) {
                     data = {
+                        content: receiver === "@everyone" ? undefined : receiver,
+                        allowed_mentions: {
+                            parse: ["roles", "users"]
+                        },
                         embeds: [
                             {
-                                description: `${sender} is offering \`pat\` to ${receiver}
-                                
-                                Do you accept?`,
+                                description: `${sender} is offering \`pat\` to ${receiver}\n\nDo you accept?`,
                                 color: color,
                             }
                         ],
@@ -105,6 +109,7 @@ app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, r
             const clickUser = message.member !== undefined ? message.member.user : message.user;
 
             let canUserClick = false;
+            let messageWasForSpecificUser = false;
 
             const embedMessage = message.message.embeds[0].description;
             const lastMentionInMessageStart = embedMessage.lastIndexOf("<@") + 2;
@@ -130,33 +135,52 @@ app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, r
                     if (receiverMention === clickUser.id) {
                         // user who clicked is the same that was tagged
                         canUserClick = true;
+                        messageWasForSpecificUser = true;
                     }
                 }
             }
 
-            if (canUserClick && message.data.custom_id === "accept_offer") {
-                res.send({
-                    type: 4,
-                    data: {
-                        embeds: [
-                            {
-                                description: `<@${message.message.interaction.user.id}> is patting <@${clickUser.id}>`,
-                                image: {
-                                    url: "https://media1.tenor.com/images/d7c326bd43776f1e0df6f63956230eb4/tenor.gif?itemid=17187002"
-                                },
-                                color: 16755938,
-                            }
-                        ],
-                        components: [],
-                        content: `<@${clickUser.id}>`,
-                    }
-                });
+            if (canUserClick) {
+                if (message.data.custom_id === "accept_offer") {
+                    res.send({
+                        type: 4,
+                        data: {
+                            embeds: [
+                                {
+                                    description: `<@${message.message.interaction.user.id}> is patting <@${clickUser.id}>`,
+                                    image: {
+                                        url: "https://media1.tenor.com/images/d7c326bd43776f1e0df6f63956230eb4/tenor.gif?itemid=17187002"
+                                    },
+                                    color: 16755938,
+                                }
+                            ],
+                            components: [],
+                            content: `<@${clickUser.id}>`,
+                        }
+                    });
+                } else if (message.data.custom_id === "decline_offer" && messageWasForSpecificUser) {
+                    console.log("re");
+                    res.send({
+                        type: 7,
+                        data: {
+                            content: "",
+                            embeds: [
+                                {
+                                    description: `<@${clickUser.id}> has declined the offer`
+                                }
+                            ],
+                            components: [],
+                        }
+                    });
+                }
             } else {
+                // user cannot click
                 res.send({
                     type: 6,
                 });
             }
         } else {
+            // this was not an accept or refuse command
             res.send({
                 type: 6,
             });
