@@ -1,6 +1,6 @@
-const express = require("express");
-const morgan = require("morgan");
-const {verifyKeyMiddleware} = require("discord-interactions");
+import express from "express";
+import morgan from "morgan";
+import {verifyKeyMiddleware} from "discord-interactions";
 
 const PUBLIC_DISCORD_APPLICATION_KEY = process.env.PUBLIC_DISCORD_APPLICATION_KEY;
 
@@ -100,7 +100,6 @@ app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, r
             data: data,
         });
     } else if (message.type === 3) {
-        console.log(message);
 
         if (message.data !== undefined && (message.data.custom_id === "accept_offer" || message.data.custom_id === "decline_offer")) {
             const clickUser = message.member !== undefined ? message.member.user : message.user;
@@ -166,5 +165,6 @@ app.post('/', verifyKeyMiddleware(PUBLIC_DISCORD_APPLICATION_KEY), async (req, r
 });
 
 let port = process.env.PORT || 3000;
-
-app.listen(port);
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});

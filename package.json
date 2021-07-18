@@ -9,14 +9,19 @@
     "url": "olaren.dev"
   },
   "license": "MIT",
-  "main": "src/interactions.js",
+  "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "start": "node src/interactions.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "dependencies": {
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "discord-interactions": "^2.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
   },
   "private": true
 }
