@@ -1,0 +1,1 @@
+ngrok http --subdomain=yuridev 3000
