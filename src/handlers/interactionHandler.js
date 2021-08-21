@@ -1,7 +1,7 @@
 import {pingHandler} from "./pingHandler.js"
 import {commandHandler} from "./commandHandler.js"
 import {componentHandler} from "./componentHandler.js"
-import {InteractionType} from "discord-api-types"
+import {InteractionType} from "discord-api-types/v9"
 
 const interactionHandler = {
     handle: async (interaction) => {

@@ -4,7 +4,7 @@ import {
     ComponentType,
     InteractionResponseType,
     MessageFlags
-} from "discord-api-types"
+} from "discord-api-types/v9"
 
 const YURI_COLOR = 16755938
 
