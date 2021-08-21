@@ -1,5 +1,6 @@
 import {CommandService} from "../services/commandService.js"
 import {MessageService} from "../services/messageService.js"
+import {ChannelService} from "../services/channelService.js"
 
 const parseCommandOptions = (commandData) => {
     let options = {}
@@ -37,6 +38,10 @@ const commandHandler = {
 
         const sender = `<@${interaction.member.user.id}>`
         const receiver = parseReceiver(interaction.data, args)
+
+        if (!await ChannelService.isChannelNSFW(interaction.channel_id) && command.nsfw) {
+            return MessageService.createBonkMessage()
+        }
 
         if (!args.options) {
             return MessageService.createCommandMessage(command, sender, receiver)
