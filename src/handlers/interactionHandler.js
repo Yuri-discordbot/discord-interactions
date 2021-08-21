@@ -4,7 +4,7 @@ import {componentHandler} from "./componentHandler.js"
 import {InteractionType} from "discord-interactions"
 
 const interactionHandler = {
-    handle: (interaction) => {
+    handle: async (interaction) => {
         switch (interaction.type) {
         case InteractionType.PING:
             return pingHandler.handle(interaction)
