@@ -5,6 +5,8 @@ import {
     InteractionResponseType,
     MessageFlags
 } from "discord-api-types/v9"
+import axios from "axios"
+import {environment} from "../env.js"
 
 const YURI_COLOR = 16755938
 
@@ -16,16 +18,20 @@ const MessageService = {
     },
 
     createErrorMessage: (message) => {
+        return MessageService.createTextMessage(`${message}\n\nPlease contact <@223125131730485249> if you need help`, true)
+    },
+
+    createTextMessage: (message, ephemeral = false) => {
         return {
             type: InteractionResponseType.ChannelMessageWithSource,
             data: {
                 embeds: [
                     {
-                        description: `${message}\n\nPlease contact <@223125131730485249> if you need help`,
+                        description: message,
                         color: YURI_COLOR
                     }
                 ],
-                flags: MessageFlags.Ephemeral
+                flags: ephemeral ? MessageFlags.Ephemeral : undefined
             }
         }
     },
@@ -114,7 +120,7 @@ const MessageService = {
                             },
                             {
                                 type: ComponentType.Button,
-                                style: ButtonStyle.Success,
+                                style: ButtonStyle.Danger,
                                 label: "No",
                                 custom_id: "decline_ask"
                             }
@@ -122,6 +128,34 @@ const MessageService = {
                     }
                 ]
             }
+        }
+    },
+
+    createReplacementMessage: (message) => {
+        return {
+            type: InteractionResponseType.UpdateMessage,
+            data: {
+                content: "",
+                embeds: [
+                    {
+                        description: message,
+                        color: YURI_COLOR
+                    }
+                ],
+                components: []
+            }
+        }
+    },
+
+    removeComponentsFromMessage: async (message) => {
+        try {
+            await axios.patch(`https://discord.com/api/v9/channels/${message.channel_id}/messages/${message.id}`, {
+                components: []
+            }, {
+                headers: {Authorization: `Bot ${environment.discordBotToken}`}
+            })
+        } catch (e) {
+            console.warn(e)
         }
     }
 }
