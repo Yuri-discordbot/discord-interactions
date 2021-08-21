@@ -1,19 +1,23 @@
-import {InteractionResponseFlags, InteractionResponseType} from "discord-interactions"
+import {
+    AllowedMentionsTypes,
+    ButtonStyle,
+    ComponentType,
+    InteractionResponseType,
+    MessageFlags
+} from "discord-api-types"
 
 const YURI_COLOR = 16755938
 
-const replaceSenderAndReceiverWithMentions = (embedText, sender, receiver) => {
-    return embedText.replace("%sender", sender).replace("%receiver", receiver)
-}
-
-const getRandomImage = (images) => {
-    return images[Math.floor(Math.random() * images.length)]
-}
-
 const MessageService = {
+    createPongMessage: () => {
+        return {
+            type: InteractionResponseType.Pong
+        }
+    },
+
     createErrorMessage: (message) => {
         return {
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            type: InteractionResponseType.ChannelMessageWithSource,
             data: {
                 embeds: [
                     {
@@ -21,24 +25,24 @@ const MessageService = {
                         color: YURI_COLOR
                     }
                 ],
-                flags: InteractionResponseFlags.EPHEMERAL
+                flags: MessageFlags.Ephemeral
             }
         }
     },
 
     createCommandMessage: (command, sender, receiver) => {
         return {
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            type: InteractionResponseType.ChannelMessageWithSource,
             data: {
                 content: receiver,
-                allowedMentions: {
-                    parse: ["roles", "users"]
+                allowed_mentions: {
+                    parse: [AllowedMentionsTypes.Role, AllowedMentionsTypes.User]
                 },
                 embeds: [
                     {
-                        description: replaceSenderAndReceiverWithMentions(command.embed_text, sender, receiver),
+                        description: command.embed_text.replace("%sender", sender).replace("%receiver", receiver),
                         image: {
-                            url: getRandomImage(command.images_urls)
+                            url: command.images_urls[Math.floor(Math.random() * command.images_urls.length)]
                         },
                         color: YURI_COLOR
                     },
@@ -47,32 +51,76 @@ const MessageService = {
         }
     },
 
-    createOfferMessage: (_command, _sender, _receiver) => {
+    createOfferMessage: (command, sender, receiver) => {
         return {
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            type: InteractionResponseType.ChannelMessageWithSource,
             data: {
+                content: receiver,
+                allowed_mentions: {
+                    parse: [AllowedMentionsTypes.Role, AllowedMentionsTypes.User]
+                },
                 embeds: [
                     {
-                        description: "Offering is not supported yet",
+                        description: `${sender} is offering \`${command.name}\` to ${receiver}\n\nDo you accept?`,
                         color: YURI_COLOR
                     }
                 ],
-                flags: InteractionResponseFlags.EPHEMERAL
+                components: [
+                    {
+                        type: ComponentType.ActionRow,
+                        components: [
+                            {
+                                type: ComponentType.Button,
+                                style: ButtonStyle.Success,
+                                label: "Yes",
+                                custom_id: "accept_offer",
+                            },
+                            {
+                                type: ComponentType.Button,
+                                style: ButtonStyle.Danger,
+                                label: "No",
+                                custom_id: "decline_offer"
+                            }
+                        ]
+                    }
+                ]
             }
         }
     },
 
-    createAskMessage: (_command, _sender, _receiver) => {
+    createAskMessage: (command, sender, receiver) => {
         return {
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            type: InteractionResponseType.ChannelMessageWithSource,
             data: {
+                content: receiver,
+                allowed_mentions: {
+                    parse: [AllowedMentionsTypes.Role, AllowedMentionsTypes.User]
+                },
                 embeds: [
                     {
-                        description: "Asking is not supported yet",
+                        description: `${sender} is asking \`${command.name}\` from ${receiver}\n\nDo you accept?`,
                         color: YURI_COLOR
                     }
                 ],
-                flags: InteractionResponseFlags.EPHEMERAL
+                components: [
+                    {
+                        type: ComponentType.ActionRow,
+                        components: [
+                            {
+                                type: ComponentType.Button,
+                                style: ButtonStyle.Success,
+                                label: "Yes",
+                                custom_id: "accept_ask",
+                            },
+                            {
+                                type: ComponentType.Button,
+                                style: ButtonStyle.Success,
+                                label: "No",
+                                custom_id: "decline_ask"
+                            }
+                        ]
+                    }
+                ]
             }
         }
     }

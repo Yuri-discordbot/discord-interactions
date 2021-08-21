@@ -1,10 +1,8 @@
-import {InteractionResponseType} from "discord-interactions"
+import {MessageService} from "../services/messageService.js"
 
 const pingHandler = {
     handle: (_interaction) => {
-        return {
-            type: InteractionResponseType.PONG
-        }
+        return MessageService.createPongMessage()
     }
 }
 
