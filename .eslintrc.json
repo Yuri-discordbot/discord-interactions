@@ -1,0 +1,64 @@
+{
+  "env": {
+    "browser": false,
+    "node": true,
+    "es2021": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-extra-parens": [
+      "warn",
+      "all",
+      {
+        "nestedBinaryExpressions": false
+      }
+    ],
+    "no-template-curly-in-string": "warn",
+    "indent": [
+      "error",
+      4
+    ],
+    "require-atomic-updates": "warn",
+    "class-methods-use-this": "warn",
+    "consistent-return": "error",
+    "default-case": "error",
+    "default-case-last": "warn",
+    "default-param-last": "error",
+    "dot-location": [
+      "warn",
+      "property"
+    ],
+    "eqeqeq": [
+      "warn",
+      "smart"
+    ],
+    "no-alert": "error",
+    "no-else-return": "warn",
+    "no-empty-function": "warn",
+    "no-eq-null": "warn",
+    "no-magic-numbers": "warn",
+    "no-return-await": "warn",
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "caughtErrors": "none"
+      }
+    ],
+    "no-var": "error",
+    "prefer-const": "warn",
+    "prefer-template": "warn",
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "semi": [
+      "error",
+      "never"
+    ]
+  }
+}

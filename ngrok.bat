@@ -1,0 +1,1 @@
+ngrok.exe http --subdomain=yuridev 3000
