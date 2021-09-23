@@ -13,7 +13,7 @@ const client = axios.create({
 const DiscordAPIClient = {
     patchMessage: async (message, patch) => {
         try {
-            await client.patch(`/channels/${message.channel_id}/messages/${message.id}`, {patch})
+            await client.patch(`/channels/${message.channel_id}/messages/${message.id}`, patch)
         } catch (e) {
             console.warn(e)
         }
